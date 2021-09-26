@@ -3,7 +3,7 @@ download google's open image dataset
 
 # Steps
 
-1. Download 
+1. Download from OID [website](https://storage.googleapis.com/openimages/web/download.html)
     - `class-descriptions-boxable.csv`
     - `test-annotations-bbox.csv`
     - `train-annotations-bbox.csv`
