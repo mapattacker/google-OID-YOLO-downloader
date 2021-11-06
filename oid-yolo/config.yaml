@@ -1,13 +1,12 @@
-limit: 10 # number of images to dl from each of train, val, test
+limit: 50 # number of images to dl from each of train, val, test
 class: Flower
 type:
-  - train
+  # - train
   - validation
   - test
 folders:
   img: img
   bbox: img
-  split: split
   metadata: metadata
 threads: 10
 attributes:

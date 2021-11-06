@@ -4,7 +4,6 @@ import yaml
 from gen_image_list import get_class_id, get_image_id
 from gen_bbox import gen_bbox, check_balance
 from downloader import download_all_images
-from utils_preprocess import train_val_split
 
 
 
@@ -29,7 +28,7 @@ def dl_metadata(cf):
         os.system("sh download_metadata.sh")
 
 
-def main(cf, downloader_cf, split=True):
+def main(cf, split=True):
     """pipeline for downloading OID images & annotation files
 
     cf (dict): configuration params from config.yaml
@@ -38,25 +37,25 @@ def main(cf, downloader_cf, split=True):
     """
     # download metadata
     dl_metadata(cf)
-    
-    # # generate download.txt
-    get_image_id(cf["class"], cf["limit"])
 
     # download images list in download.txt
-    download_all_images(downloader_cf)
+    download_file_suffix = cf["img_downloader"]
 
-    # generate bbox text files
-    gen_bbox()
-    check_balance()
+    for type_ in cf["type"]:
+        # generate *-download.txt
+        get_image_id(cf["class"], type_, cf["limit"])
 
-    folder = cf["folders"]
-    if split:
-        print("Executing train-val split")
-        train_val_split(
-            folder["img"], folder["bbox"], folder["split"],
-            seed=cf["split"]["seed"],
-            val_ratio=cf["split"]["val_ratio"],
-            val_min=cf["split"]["val_min"])
+        # download images from *-download.txt
+        download_file = f'{type_}-{download_file_suffix}'
+            # adhere to original script args
+        downloader_cf = {"image_list": download_file,
+                         "num_processes": cf["threads"],
+                         "download_folder": os.path.join(folder["img"], type_)}
+        download_all_images(downloader_cf)
+
+        # generate bbox text files
+        gen_bbox(type_)
+        check_balance(type_)
 
 
 if __name__ == "__main__":
@@ -66,15 +65,11 @@ if __name__ == "__main__":
 
     folder = cf["folders"]
     folder_list = [folder[key] for key in folder.keys()]
+    type_list = [os.path.join(folder["img"], i) for i in cf["type"]]
+    folder_list = folder_list + type_list
     create_folders(folder_list)
 
-    # adhere to original script args
-    downloader_cf = {
-            "image_list": cf["img_downloader"], 
-            "num_processes": 10,
-            "download_folder": folder["img"]}
-
     # execute pipeline
-    main(cf, downloader_cf)
+    main(cf)
 
     

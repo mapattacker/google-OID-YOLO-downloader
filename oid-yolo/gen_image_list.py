@@ -3,6 +3,8 @@ import os
 import pandas as pd
 import yaml
 
+from utils_preprocess import image_attributes
+
 
 # import configs
 f = open("config.yaml", "r")
@@ -60,27 +62,9 @@ def get_image_id(class_, type_, limit, csv_folder=folder["metadata"]):
     df = pd.read_csv(path)
 
     # filter by attributes
-    if IsOccluded:
-        df = df[df["IsOccluded"]==1]
-    elif IsOccluded == False:
-        df = df[df["IsOccluded"]==0]
-    if IsTruncated:
-        df = df[df["IsTruncated"]==1]
-    elif IsTruncated == False:
-        df = df[df["IsTruncated"]==0]
-    if IsGroupOf:
-        df = df[df["IsGroupOf"]==1]
-    elif IsGroupOf == False:
-        df = df[df["IsGroupOf"]==0]
-    if IsDepiction:
-        df = df[df["IsDepiction"]==1]
-    elif IsDepiction == False:
-        df = df[df["IsDepiction"]==0]
-    if IsInside:
-        df = df[df["IsInside"]==1]
-    elif IsInside == False:
-        df = df[df["IsInside"]==0]
-    
+    df = image_attributes(df, 
+            IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
+
     df = df.drop_duplicates(subset=['ImageID'])
 
     # limit result
