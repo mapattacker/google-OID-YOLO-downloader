@@ -1,6 +1,8 @@
+limit: 500
+class: Flower
 download_folders:
   img: img
-  bbox: txt
+  bbox: img
   metadata: metadata
 bbox_suffix: annotations-bbox.csv
 img_downloader: download.txt
