@@ -6,9 +6,10 @@ download google's open image dataset v6 (OID). official [website](https://storag
 
 ```bash
 cd oid-yolo
+pip install -r requirements.txt
 ```
 
-Edit `config.yaml`
+Edit `config.yaml` as necessary
 
 ```bash
 python main.py
