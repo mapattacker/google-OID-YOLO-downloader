@@ -76,6 +76,6 @@ if __name__ == "__main__":
     create_folders(folder_list)
 
     # execute pipeline
-    main(cf)g
+    main(cf)
 
     
