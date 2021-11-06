@@ -1,7 +1,7 @@
 limit: 50 # number of images to dl from each of train, val, test
 class: Flower
 type:
-  # - train
+  - train
   - validation
   - test
 folders:
@@ -15,10 +15,6 @@ attributes:
   IsDepiction: False
   IsInside: False
   IsGroupOf: null
-split:
-  seed: 1
-  val_ratio: 0.3334
-  val_min: null
 # do not change these unless u know what you are doing
 url:
   - https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv
