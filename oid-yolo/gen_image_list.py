@@ -43,17 +43,10 @@ def get_image_id(class_, limit, csv_folder=folder["metadata"]):
     """
 
     class_id = get_class_id(class_, csv_folder)
-
-    # # get file names
-    # image_file = "-annotations-bbox.csv"
-    # if type == "all":
-    #     image_file_list = [f"train{image_file}", f"test{image_file}", f"validation{image_file}"]
-    # else:
-    #     image_file_list = [f"{type}{image_file}"]
-
     
     download_file_suffix = cf["img_downloader"]
     annotation_file_suffix = cf["bbox_suffix"]
+    
     for type_ in cf["type"]:
         download_file = f'{type_}-{download_file_suffix}'
         annotation_file = f"{type_}-{annotation_file_suffix}"
