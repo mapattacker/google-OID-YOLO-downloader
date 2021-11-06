@@ -1,3 +1,9 @@
+oid-yolo/img
+oid-yolo/metadata
+oid-yolo/split
+oid-yolo/download.txt
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
