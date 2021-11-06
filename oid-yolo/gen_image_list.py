@@ -27,7 +27,7 @@ def get_class_id(class_, csv_folder=folder["metadata"]):
     return class_id
 
 
-def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
+def get_image_id(class_, limit, csv_folder=folder["metadata"]):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
@@ -44,23 +44,25 @@ def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
 
     class_id = get_class_id(class_, csv_folder)
 
-    # get file names
-    image_file = "-annotations-bbox.csv"
-    if type == "all":
-        image_file_list = [f"train{image_file}", f"test{image_file}", f"validation{image_file}"]
-    else:
-        image_file_list = [f"{type}{image_file}"]
+    # # get file names
+    # image_file = "-annotations-bbox.csv"
+    # if type == "all":
+    #     image_file_list = [f"train{image_file}", f"test{image_file}", f"validation{image_file}"]
+    # else:
+    #     image_file_list = [f"{type}{image_file}"]
 
     
-    # delete output file if already exist
-    download_file = cf["img_downloader"]
-    if os.path.isfile(download_file):
-        os.remove(download_file)
+    download_file_suffix = cf["img_downloader"]
+    annotation_file_suffix = cf["bbox_suffix"]
+    for type_ in cf["type"]:
+        download_file = f'{type_}-{download_file_suffix}'
+        annotation_file = f"{type_}-{annotation_file_suffix}"
 
-    for file in image_file_list:
-        type = file.split("-")[0]
-        path = os.path.join(csv_folder, file)
+        # delete output file if already exist
+        if os.path.isfile(download_file):
+            os.remove(download_file)
 
+        path = os.path.join(csv_folder, annotation_file)
         print(f"reading {path}...")
         df = pd.read_csv(path)
 
@@ -95,7 +97,7 @@ def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
             image_ids = df[df["LabelName"]==class_id]
 
         # add type path
-        image_ids["ids"] = image_ids["ImageID"].apply(lambda x: type + "/" + x )
+        image_ids["ids"] = image_ids["ImageID"].apply(lambda x: type_ + "/" + x )
 
         # expend image ids to dl file
         with open(download_file, 'a') as f:
@@ -103,5 +105,4 @@ def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
 
 
 if __name__ == "__main__":
-    class_id = get_class_id(cf["class"])
-    get_image_id(class_id, limit=cf["limit"], type="all")
+    get_image_id("Flower", limit=cf["limit"])
