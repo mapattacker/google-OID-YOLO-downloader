@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 
-def get_class_id(class_, csv_folder="csv_folder"):
+def get_class_id(class_, csv_folder="metadata"):
     """get class id"""
     path = os.path.join(csv_folder, "class-descriptions-boxable.csv")
     class_df = pd.read_csv(path, names=["id", "class"])
@@ -20,7 +20,7 @@ def get_image_id(
         IsDepiction=None,
         IsInside=None,
         type="all", 
-        csv_folder="csv_folder"
+        csv_folder="metadata"
     ):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
@@ -73,6 +73,8 @@ def get_image_id(
         elif IsInside == False:
             df = df[df["IsInside"]==0]
         
+        df = df.drop_duplicates(subset=['ImageID'])
+
         # limit result
         if limit:
             image_ids = df[df["LabelName"]==class_id][:limit]
