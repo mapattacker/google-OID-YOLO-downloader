@@ -30,6 +30,12 @@ def dl_metadata(cf):
 
 
 def main(cf, downloader_cf, split=True):
+    """pipeline for downloading OID images & annotation files
+
+    cf (dict): configuration params from config.yaml
+    downloader_cf (dict): customised params for downloader.py
+    split (bool): execute train-val split of img & txt files
+    """
     # download metadata
     dl_metadata(cf)
     
