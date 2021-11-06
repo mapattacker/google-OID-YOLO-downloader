@@ -29,19 +29,20 @@ def gen_bbox(type_):
     dl_df = pd.read_csv(download_file, sep="/", names=["type", "img"])
     types = dl_df["type"].unique()
 
+    # read annotation file
     bbox_file = f'{type_}-{cf["bbox_suffix"]}'
     bbox_path = os.path.join(folder["metadata"], bbox_file)
-
-    print(f"reading {bbox_path}...")
+    usecols = ["ImageID", "XMin", "XMax", "YMin", "YMax",
+                "IsOccluded", "IsTruncated", "IsDepiction", 
+                "IsInside", "IsGroupOf"]
     df = pd.read_csv(bbox_path)
 
     # filter by attributes
     df = image_attributes(df, 
             IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
 
-    print(f"extracting from {type_}")
     img_list = dl_df[dl_df["type"]==type_]["img"].tolist()
-    for img in tqdm(img_list):
+    for img in tqdm(img_list, desc=f"extracting from {type_}"):
         img_df = df[df["ImageID"]==img]
         img_df = img_df[["XMin", "XMax", "YMin", "YMax"]]
 
@@ -85,7 +86,7 @@ def check_balance(
             print("ERR:" + txt + " does not have a corresponding image")
 
     if flag == False:
-        print("image & label balance check: OK")
+        print("Image & label balance check: OK")
     
     return flag
 

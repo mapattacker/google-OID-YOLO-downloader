@@ -52,15 +52,17 @@ def get_image_id(class_, type_, limit, csv_folder=folder["metadata"]):
     if os.path.isfile(download_file):
         os.remove(download_file)
 
+    # read annotation file
     path = os.path.join(csv_folder, annotation_file)
-    print(f"reading {path}...")
-    df = pd.read_csv(path)
+    usecols = ["ImageID", "LabelName", "IsOccluded", "IsTruncated", 
+               "IsDepiction", "IsInside", "IsGroupOf"]
+    df = pd.read_csv(path, usecols=usecols)
 
     # filter by attributes
     df = image_attributes(df, 
             IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
 
-    df = df.drop_duplicates(subset=['ImageID'])
+    df = df.drop_duplicates(subset=["ImageID"])
 
     # limit result
     if limit:
