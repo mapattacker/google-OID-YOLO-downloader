@@ -1,11 +1,11 @@
 import os
 from urllib.request import urlretrieve
+
 import yaml
 
-from gen_image_list import get_class_id, get_image_id
-from gen_bbox import gen_bbox, check_balance
 from downloader import download_all_images
-
+from gen_bbox import check_balance, gen_bbox
+from gen_image_list import get_class_id, get_image_id
 
 
 def create_folders(folder_list):
