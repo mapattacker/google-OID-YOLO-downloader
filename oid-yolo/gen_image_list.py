@@ -27,12 +27,13 @@ def get_class_id(class_, csv_folder=folder["metadata"]):
     return class_id
 
 
-def get_image_id(class_, limit, csv_folder=folder["metadata"]):
+def get_image_id(class_, type_, limit, csv_folder=folder["metadata"]):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
     Args:
         class (str): class_name as specified by OID
+        type_ (str): "train", "validation", or "test"
         limit (int): number of images of each type to download
         IsOccluded (bool): Indicates that the object is occluded by another object in the image.
         IsTruncated (bool): Indicates that the object extends beyond the boundary of the image.
@@ -47,55 +48,54 @@ def get_image_id(class_, limit, csv_folder=folder["metadata"]):
     download_file_suffix = cf["img_downloader"]
     annotation_file_suffix = cf["bbox_suffix"]
     
-    for type_ in cf["type"]:
-        download_file = f'{type_}-{download_file_suffix}'
-        annotation_file = f"{type_}-{annotation_file_suffix}"
+    download_file = f'{type_}-{download_file_suffix}'
+    annotation_file = f"{type_}-{annotation_file_suffix}"
 
-        # delete output file if already exist
-        if os.path.isfile(download_file):
-            os.remove(download_file)
+    # delete output file if already exist
+    if os.path.isfile(download_file):
+        os.remove(download_file)
 
-        path = os.path.join(csv_folder, annotation_file)
-        print(f"reading {path}...")
-        df = pd.read_csv(path)
+    path = os.path.join(csv_folder, annotation_file)
+    print(f"reading {path}...")
+    df = pd.read_csv(path)
 
-        # filter by attributes
-        if IsOccluded:
-            df = df[df["IsOccluded"]==1]
-        elif IsOccluded == False:
-            df = df[df["IsOccluded"]==0]
-        if IsTruncated:
-            df = df[df["IsTruncated"]==1]
-        elif IsTruncated == False:
-            df = df[df["IsTruncated"]==0]
-        if IsGroupOf:
-            df = df[df["IsGroupOf"]==1]
-        elif IsGroupOf == False:
-            df = df[df["IsGroupOf"]==0]
-        if IsDepiction:
-            df = df[df["IsDepiction"]==1]
-        elif IsDepiction == False:
-            df = df[df["IsDepiction"]==0]
-        if IsInside:
-            df = df[df["IsInside"]==1]
-        elif IsInside == False:
-            df = df[df["IsInside"]==0]
-        
-        df = df.drop_duplicates(subset=['ImageID'])
+    # filter by attributes
+    if IsOccluded:
+        df = df[df["IsOccluded"]==1]
+    elif IsOccluded == False:
+        df = df[df["IsOccluded"]==0]
+    if IsTruncated:
+        df = df[df["IsTruncated"]==1]
+    elif IsTruncated == False:
+        df = df[df["IsTruncated"]==0]
+    if IsGroupOf:
+        df = df[df["IsGroupOf"]==1]
+    elif IsGroupOf == False:
+        df = df[df["IsGroupOf"]==0]
+    if IsDepiction:
+        df = df[df["IsDepiction"]==1]
+    elif IsDepiction == False:
+        df = df[df["IsDepiction"]==0]
+    if IsInside:
+        df = df[df["IsInside"]==1]
+    elif IsInside == False:
+        df = df[df["IsInside"]==0]
+    
+    df = df.drop_duplicates(subset=['ImageID'])
 
-        # limit result
-        if limit:
-            image_ids = df[df["LabelName"]==class_id][:limit]
-        else:
-            image_ids = df[df["LabelName"]==class_id]
+    # limit result
+    if limit:
+        image_ids = df[df["LabelName"]==class_id][:limit]
+    else:
+        image_ids = df[df["LabelName"]==class_id]
 
-        # add type path
-        image_ids["ids"] = image_ids["ImageID"].apply(lambda x: type_ + "/" + x )
+    # add type path
+    image_ids["ids"] = image_ids["ImageID"].apply(lambda x: type_ + "/" + x )
 
-        # expend image ids to dl file
-        with open(download_file, 'a') as f:
-            image_ids["ids"].to_csv(f, header=False, index=False)
+    # expend image ids to dl file
+    with open(download_file, 'a') as f:
+        image_ids["ids"].to_csv(f, header=False, index=False)
 
 
 if __name__ == "__main__":
-    get_image_id("Flower", limit=cf["limit"])
+    get_image_id("Flower", "test", limit=cf["limit"])
