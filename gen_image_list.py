@@ -1,9 +1,25 @@
 import os
 
 import pandas as pd
+import yaml
 
 
-def get_class_id(class_, csv_folder="metadata"):
+# import configs
+f = open("config.yaml", "r")
+cf = yaml.safe_load(f)
+
+folder = cf["download_folders"]
+attr = cf["attributes"]
+
+IsOccluded = attr["IsOccluded"]
+IsTruncated = attr["IsTruncated"]
+IsDepiction = attr["IsDepiction"]
+IsInside = attr["IsInside"]
+IsGroupOf = attr["IsGroupOf"]
+
+
+
+def get_class_id(class_, csv_folder=folder["metadata"]):
     """get class id"""
     path = os.path.join(csv_folder, "class-descriptions-boxable.csv")
     class_df = pd.read_csv(path, names=["id", "class"])
@@ -14,13 +30,8 @@ def get_class_id(class_, csv_folder="metadata"):
 def get_image_id(
         class_id,
         limit=None,
-        IsOccluded=None,
-        IsTruncated=None,
-        IsGroupOf=None,
-        IsDepiction=None,
-        IsInside=None,
         type="all", 
-        csv_folder="metadata"
+        csv_folder=folder["metadata"]
     ):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
@@ -31,6 +42,7 @@ def get_image_id(
         IsGroupOf (bool): Indicates that the box spans a group of objects (e.g., a bed of flowers or a crowd of people). We asked annotators to use this tag for cases with more than 5 instances which are heavily occluding each other and are physically touching.
         IsDepiction (bool): Indicates that the object is a depiction (e.g., a cartoon or drawing of the object, not a real physical instance).
         IsInside (bool): Indicates a picture taken from the inside of the object (e.g., a car interior or inside of a building).
+        type (str): "all", "train", "validation", or "test"
 """
 
     # get file names
@@ -49,6 +61,8 @@ def get_image_id(
     for file in image_file_list:
         type = file.split("-")[0]
         path = os.path.join(csv_folder, file)
+
+        print(f"reading {path}...")
         df = pd.read_csv(path)
 
         # filter by attributes
@@ -91,9 +105,4 @@ def get_image_id(
 
 if __name__ == "__main__":
     class_id = get_class_id("Flower")
-    get_image_id(class_id, 
-                    IsOccluded=False, 
-                    IsTruncated=False,
-                    IsDepiction=False,
-                    IsInside=False,
-                    limit=20000, type="all")
+    get_image_id(class_id, limit=20, type="all")
