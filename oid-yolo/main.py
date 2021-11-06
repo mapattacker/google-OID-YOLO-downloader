@@ -18,12 +18,14 @@ def create_folders(folder_list):
 def dl_metadata(cf):
     """download metadata from OID"""
     folders = cf["folders"]
+
     # download class csv if not exist
     class_path = os.path.join(folders["metadata"], cf["class_csv"])
     if not os.path.isfile(class_path):
         print(f'Downloading {cf["class_csv"]}...')
         urlretrieve(cf["url"]["class"], class_path)
     
+    # download train-val-test annotation csv
     for type_ in cf["type"]:
         annotation_file = f'{type_}-{cf["bbox_suffix"]}'
         annotation_path = os.path.join(folders["metadata"], annotation_file)
