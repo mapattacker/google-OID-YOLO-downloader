@@ -53,7 +53,7 @@ def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
 
     
     # delete output file if already exist
-    download_file = 'download.txt'
+    download_file = cf["img_downloader"]
     if os.path.isfile(download_file):
         os.remove(download_file)
 
