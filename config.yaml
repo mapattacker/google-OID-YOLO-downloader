@@ -1,6 +1,6 @@
 limit: 500
 class: Flower
-download_folders:
+folders:
   img: img
   bbox: img
   split: split

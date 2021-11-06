@@ -12,7 +12,7 @@ from utils_bbox import Nxxyy2yolo
 f = open("config.yaml", "r")
 cf = yaml.safe_load(f)
 
-folder = cf["download_folders"]
+folder = cf["folders"]
 attr = cf["attributes"]
 
 IsOccluded = attr["IsOccluded"]

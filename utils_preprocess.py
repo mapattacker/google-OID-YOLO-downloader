@@ -68,7 +68,7 @@ if __name__ == "__main__":
     import yaml
     f = open("config.yaml", "r")
     cf = yaml.safe_load(f)
-    folder = cf["download_folders"]
+    folder = cf["folders"]
 
     train_val_split(
         folder["img"], 
