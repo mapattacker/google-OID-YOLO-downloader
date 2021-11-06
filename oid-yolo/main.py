@@ -25,7 +25,7 @@ def dl_metadata(cf):
         print(f'Downloading {cf["class_csv"]}...')
         urlretrieve(cf["url"]["class"], class_path)
     
-    # download train-val-test annotation csvg
+    # download train-val-test annotation csv
     for type_ in cf["type"]:
         annotation_file = f'{type_}-{cf["bbox_suffix"]}'
         annotation_path = os.path.join(folders["metadata"], annotation_file)
