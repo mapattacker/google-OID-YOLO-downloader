@@ -26,7 +26,7 @@ def dl_metadata(cf):
         urlretrieve(cf["url"]["class"], class_path)
     
     # download train-val-test annotation csv
-    for type_ in cf["type"]:
+    for type_ in cf["limit"].keys():
         annotation_file = f'{type_}-{cf["bbox_suffix"]}'
         annotation_path = os.path.join(folders["metadata"], annotation_file)
         if not os.path.isfile(annotation_path):
@@ -47,9 +47,9 @@ def main(cf):
     # download images list in download.txt
     download_file_suffix = cf["img_downloader"]
 
-    for type_ in cf["type"]:
+    for type_ in cf["limit"]:
         # generate *-download.txt
-        get_image_id(cf["class"], type_, cf["limit"])
+        get_image_id(cf["class"], type_, cf["limit"][type_])
 
         # download images from *-download.txt
         download_file = f'{type_}-{download_file_suffix}'
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     folder = cf["folders"]
     folder_list = [folder[key] for key in folder.keys()]
-    type_list = [os.path.join(folder["img"], i) for i in cf["type"]]
+    type_list = [os.path.join(folder["img"], i) for i in cf["limit"].keys()]
     folder_list = folder_list + type_list
     create_folders(folder_list)
 

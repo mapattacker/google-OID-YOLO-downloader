@@ -1,9 +1,8 @@
-limit: 50 # number of images to dl from each of train, val, test
 class: Flower
-type:
-  - train
-  - validation
-  - test
+limit: # number of images to dl
+  train: 1500
+  validation: 500
+  test: 500
 folders:
   img: img
   bbox: img
