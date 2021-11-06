@@ -17,7 +17,7 @@ def get_file_list(folder, file_extensions):
 
 
 def train_val_split(img_folder, txt_folder, data_dir, \
-                     seed=-1, val_ratio=0.1, val_min=50, \
+                     seed=-1, val_ratio=0.1, val_min=None, \
                      img_ext=(".jpg", "jpeg", ".png", "bmp")):
     """randomised train-val split, copy result splits to data dir"""
 
@@ -29,8 +29,9 @@ def train_val_split(img_folder, txt_folder, data_dir, \
     # get train & val images
     total = len(imglist)
     val_total = total * val_ratio
-    if val_total < val_min:
-        val_total = val_min
+    if val_min:
+        if val_total < val_min:
+            val_total = val_min
     val_images = imglist[:int(val_total)]
     train_images = imglist[int(val_total):]
 

@@ -27,17 +27,12 @@ def get_class_id(class_, csv_folder=folder["metadata"]):
     return class_id
 
 
-def get_image_id(
-        class_id,
-        limit=None,
-        type="all", 
-        csv_folder=folder["metadata"]
-    ):
+def get_image_id(class_, limit, type="all", csv_folder=folder["metadata"]):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
     Args:
-        class_id (str): unique id of class as specified by OID
+        class (str): class_name as specified by OID
         limit (int): number of images of each type to download
         IsOccluded (bool): Indicates that the object is occluded by another object in the image.
         IsTruncated (bool): Indicates that the object extends beyond the boundary of the image.
@@ -45,7 +40,9 @@ def get_image_id(
         IsDepiction (bool): Indicates that the object is a depiction (e.g., a cartoon or drawing of the object, not a real physical instance).
         IsInside (bool): Indicates a picture taken from the inside of the object (e.g., a car interior or inside of a building).
         type (str): "all", "train", "validation", or "test"
-"""
+    """
+
+    class_id = get_class_id(class_, csv_folder)
 
     # get file names
     image_file = "-annotations-bbox.csv"

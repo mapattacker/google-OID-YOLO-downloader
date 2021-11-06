@@ -1,0 +1,29 @@
+limit: 10 # number of images to dl from each of train, val, test
+class: Flower
+type:
+  - train
+  - validation
+  - test
+url:
+  - https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv
+  - https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv
+  - https://storage.googleapis.com/openimages/v5/test-annotations-bbox.csv
+  - https://storage.googleapis.com/openimages/v5/class-descriptions-boxable.csv
+folders:
+  img: img
+  bbox: img
+  split: split
+  metadata: metadata
+bbox_suffix: annotations-bbox.csv
+img_downloader: download.txt
+threads: 20
+attributes:
+  IsOccluded: False
+  IsTruncated: False
+  IsDepiction: False
+  IsInside: False
+  IsGroupOf: null
+split:
+  seed: 1
+  val_ratio: 0.3334
+  val_min: null
