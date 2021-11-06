@@ -48,10 +48,10 @@ def main(cf):
     download_file_suffix = cf["img_downloader"]
 
     for type_ in cf["limit"]:
-        # generate *-download.txt
+        print("Generating *-download.txt file")
         get_image_id(cf["class"], type_, cf["limit"][type_])
 
-        # download images from *-download.txt
+        print("Starting image download...")
         download_file = f'{type_}-{download_file_suffix}'
             # adhere to original script args
         downloader_cf = {"image_list": download_file,
@@ -59,7 +59,7 @@ def main(cf):
                          "download_folder": os.path.join(folder["img"], type_)}
         download_all_images(downloader_cf)
 
-        # generate bbox text files
+        print("Starting annotation download...")
         gen_bbox(type_)
         check_balance(type_)
 
