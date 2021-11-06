@@ -6,22 +6,8 @@ import yaml
 from utils_preprocess import image_attributes
 
 
-# import configs
-f = open("config.yaml", "r")
-cf = yaml.safe_load(f)
 
-folder = cf["folders"]
-attr = cf["attributes"]
-
-IsOccluded = attr["IsOccluded"]
-IsTruncated = attr["IsTruncated"]
-IsDepiction = attr["IsDepiction"]
-IsInside = attr["IsInside"]
-IsGroupOf = attr["IsGroupOf"]
-
-
-
-def get_class_id(class_, csv_folder=folder["metadata"]):
+def get_class_id(class_, csv_folder):
     """get class id"""
     path = os.path.join(csv_folder, "class-descriptions-boxable.csv")
     class_df = pd.read_csv(path, names=["id", "class"])
@@ -29,7 +15,7 @@ def get_class_id(class_, csv_folder=folder["metadata"]):
     return class_id
 
 
-def get_image_id(class_, type_, limit, csv_folder=folder["metadata"]):
+def get_image_id(cf, type_):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
@@ -39,6 +25,18 @@ def get_image_id(class_, type_, limit, csv_folder=folder["metadata"]):
         limit (int): number of images of each type to download
         type (str): "all", "train", "validation", or "test"
     """
+    
+    folder = cf["folders"]
+    limit = cf["limit"][type_]
+    csv_folder = folder["metadata"]
+    class_ = cf["class"]
+    attr = cf["attributes"]
+    IsOccluded = attr["IsOccluded"]
+    IsTruncated = attr["IsTruncated"]
+    IsDepiction = attr["IsDepiction"]
+    IsInside = attr["IsInside"]
+    IsGroupOf = attr["IsGroupOf"]
+
 
     class_id = get_class_id(class_, csv_folder)
     

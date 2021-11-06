@@ -41,27 +41,25 @@ def main(cf):
     downloader_cf (dict): customised params for downloader.py
     split (bool): execute train-val split of img & txt files
     """
-    # download metadata
+
     dl_metadata(cf)
 
-    # download images list in download.txt
     download_file_suffix = cf["img_downloader"]
-
     for type_ in cf["limit"]:
-        print("Generating *-download.txt file")
-        get_image_id(cf["class"], type_, cf["limit"][type_])
+        print(f"Generating {type_}-download.txt file...")
+        get_image_id(cf, type_)
 
-        print("Starting image download...")
         download_file = f'{type_}-{download_file_suffix}'
-            # adhere to original script args
+        # adhere to original script args
         downloader_cf = {"image_list": download_file,
                          "num_processes": cf["threads"],
                          "download_folder": os.path.join(folder["img"], type_)}
         download_all_images(downloader_cf)
 
-        print("Starting annotation download...")
-        gen_bbox(type_)
-        check_balance(type_)
+        gen_bbox(cf, type_)
+        check_balance(cf, type_)
+
+        print("\n")
 
 
 if __name__ == "__main__":

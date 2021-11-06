@@ -1,29 +1,24 @@
 import os
 
 import pandas as pd
-import yaml
 from tqdm import tqdm
 
 from utils_preprocess import get_file_list, image_attributes
 from utils_bbox import Nxxyy2yolo
 
 
-# import configs
-f = open("config.yaml", "r")
-cf = yaml.safe_load(f)
 
-folder = cf["folders"]
-attr = cf["attributes"]
-
-IsOccluded = attr["IsOccluded"]
-IsTruncated = attr["IsTruncated"]
-IsDepiction = attr["IsDepiction"]
-IsInside = attr["IsInside"]
-IsGroupOf = attr["IsGroupOf"]
-
-
-def gen_bbox(type_):
+def gen_bbox(cf, type_):
     """generate annotation bbox text files for each image downloaded"""
+
+    # load configs
+    folder = cf["folders"]
+    attr = cf["attributes"]
+    IsOccluded = attr["IsOccluded"]
+    IsTruncated = attr["IsTruncated"]
+    IsDepiction = attr["IsDepiction"]
+    IsInside = attr["IsInside"]
+    IsGroupOf = attr["IsGroupOf"]
 
     download_file = f'{type_}-{cf["img_downloader"]}'
     dl_df = pd.read_csv(download_file, sep="/", names=["type", "img"])
@@ -42,7 +37,7 @@ def gen_bbox(type_):
             IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
 
     img_list = dl_df[dl_df["type"]==type_]["img"].tolist()
-    for img in tqdm(img_list, desc=f"extracting from {type_}"):
+    for img in tqdm(img_list, desc="Downloading annotations"):
         img_df = df[df["ImageID"]==img]
         img_df = img_df[["XMin", "XMax", "YMin", "YMax"]]
 
@@ -56,12 +51,12 @@ def gen_bbox(type_):
             f.write(f'0 {yolo[0]} {yolo[1]} {yolo[2]} {yolo[3]}\n')
 
 
-def check_balance(
-        type_,
-        img_folder=folder["img"], 
-        txt_folder=folder["bbox"], 
-        img_ext=(".jpg", "jpeg", ".png", "bmp")):
+def check_balance(cf, type_, img_ext=(".jpg", "jpeg", ".png", "bmp")):
     """check all images have corresponding YOLO annotation text files & vice versa"""
+    
+    folder = cf["folders"]
+    img_folder = folder["img"]
+    txt_folder = folder["bbox"]
 
     img_folder = os.path.join(img_folder, type_)
     txt_folder = os.path.join(txt_folder, type_)
