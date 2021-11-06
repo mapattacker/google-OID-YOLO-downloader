@@ -37,6 +37,8 @@ def get_image_id(
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
     Args:
+        class_id (str): unique id of class as specified by OID
+        limit (int): number of images of each type to download
         IsOccluded (bool): Indicates that the object is occluded by another object in the image.
         IsTruncated (bool): Indicates that the object extends beyond the boundary of the image.
         IsGroupOf (bool): Indicates that the box spans a group of objects (e.g., a bed of flowers or a crowd of people). We asked annotators to use this tag for cases with more than 5 instances which are heavily occluding each other and are physically touching.
@@ -104,5 +106,5 @@ def get_image_id(
 
 
 if __name__ == "__main__":
-    class_id = get_class_id("Flower")
-    get_image_id(class_id, limit=20, type="all")
+    class_id = get_class_id(cf["class"])
+    get_image_id(class_id, limit=cf["limit"], type="all")
