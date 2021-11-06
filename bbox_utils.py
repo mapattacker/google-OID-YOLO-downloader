@@ -1,7 +1,7 @@
 """utility scripts for bbox format conversions"""
 
 
-def xxyy2yolo(xmin, xmax, ymin, ymax):
+def Nxxyy2yolo(xmin, xmax, ymin, ymax):
     """convert normalised xxyy OID format to yolo format"""
 
     ratio_cx = (xmin + xmax)/2
@@ -13,7 +13,7 @@ def xxyy2yolo(xmin, xmax, ymin, ymax):
 
 
 def xxyy2yolo(size, box):
-    """convert XMin	XMax YMin YMax coordinates to yolo format
+    """convert XMin XMax YMin YMax coordinates to yolo format
     
     Args
     ----
