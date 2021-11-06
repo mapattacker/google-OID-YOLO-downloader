@@ -3,6 +3,7 @@ download_folders:
   bbox: txt
   metadata: metadata
 bbox_suffix: annotations-bbox.csv
+img_downloader: download.txt
 attributes:
   IsOccluded: False
   IsTruncated: False
