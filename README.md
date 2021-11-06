@@ -1,6 +1,8 @@
 # google-OID-downloader
 
-download google's open image dataset v6 (OID). official [website](https://storage.googleapis.com/openimages/web/download.html) of OID.
+Download Google's open image dataset v6 (OID), with corresponding YOLO annotation files.
+
+Official [website](https://storage.googleapis.com/openimages/web/download.html).
 
 # TL;DR
 
