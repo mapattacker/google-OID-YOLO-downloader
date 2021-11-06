@@ -8,8 +8,16 @@ from gen_bbox import check_balance, gen_bbox
 from gen_image_list import get_class_id, get_image_id
 
 
-def create_folders(folder_list):
+def create_folders(cf):
     """create folders if don't exist"""
+    folder_dict = cf["folders"]
+    limit_dict = cf["limit"]
+
+    main_folder_list = [folder_dict[key] for key in folder_dict.keys()]
+    img_subfolder_list = [os.path.join(folder_dict["img"], i) for i in limit_dict.keys()]
+    txt_subfolder_list = [os.path.join(folder_dict["bbox"], i) for i in limit_dict.keys()]
+    folder_list = main_folder_list + img_subfolder_list + txt_subfolder_list
+
     for folder in folder_list:
         if not os.path.exists(folder):
             os.makedirs(folder)
@@ -53,7 +61,7 @@ def main(cf):
         # adhere to original script args
         downloader_cf = {"image_list": download_file,
                          "num_processes": cf["threads"],
-                         "download_folder": os.path.join(folder["img"], type_)}
+                         "download_folder": os.path.join(cf["folders"]["img"], type_)}
         download_all_images(downloader_cf)
 
         gen_bbox(cf, type_)
@@ -63,17 +71,9 @@ def main(cf):
 
 
 if __name__ == "__main__":
-    # import configs
     f = open("config.yaml", "r")
     cf = yaml.safe_load(f)
-
-    folder = cf["folders"]
-    folder_list = [folder[key] for key in folder.keys()]
-    type_list = [os.path.join(folder["img"], i) for i in cf["limit"].keys()]
-    folder_list = folder_list + type_list
-    create_folders(folder_list)
-
-    # execute pipeline
+    create_folders(cf)
     main(cf)
 
     
