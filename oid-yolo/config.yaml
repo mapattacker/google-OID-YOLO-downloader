@@ -17,9 +17,10 @@ attributes:
   IsGroupOf: null
 # do not change these unless u know what you are doing
 url:
-  - https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv
-  - https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv
-  - https://storage.googleapis.com/openimages/v5/test-annotations-bbox.csv
-  - https://storage.googleapis.com/openimages/v5/class-descriptions-boxable.csv
+  train: https://storage.googleapis.com/openimages/v6/oidv6-train-annotations-bbox.csv
+  validation: https://storage.googleapis.com/openimages/v5/validation-annotations-bbox.csv
+  test: https://storage.googleapis.com/openimages/v5/test-annotations-bbox.csv
+  class: https://storage.googleapis.com/openimages/v5/class-descriptions-boxable.csv
 bbox_suffix: annotations-bbox.csv
+class_csv: class-descriptions-boxable.csv
 img_downloader: download.txt

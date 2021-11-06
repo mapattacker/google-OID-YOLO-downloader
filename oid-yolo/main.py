@@ -1,4 +1,5 @@
 import os
+from urllib.request import urlretrieve
 import yaml
 
 from gen_image_list import get_class_id, get_image_id
@@ -16,16 +17,19 @@ def create_folders(folder_list):
 
 def dl_metadata(cf):
     """download metadata from OID"""
-    meta_files = [f'{i}-{cf["bbox_suffix"]}' for i in cf["type"]]
-    meta_files.append("class-descriptions-boxable.csv")
-    meta_paths = [os.path.join(cf["folders"]["metadata"], i) for i in meta_files]
-
-    not_exist = False
-    for file_path in meta_paths:
-        if not os.path.isfile(file_path):
-            not_exist = True
-    if not_exist:
-        os.system("sh download_metadata.sh")
+    folders = cf["folders"]
+    # download class csv if not exist
+    class_path = os.path.join(folders["metadata"], cf["class_csv"])
+    if not os.path.isfile(class_path):
+        print(f'Downloading {cf["class_csv"]}...')
+        urlretrieve(cf["url"]["class"], class_path)
+    
+    for type_ in cf["type"]:
+        annotation_file = f'{type_}-{cf["bbox_suffix"]}'
+        annotation_path = os.path.join(folders["metadata"], annotation_file)
+        if not os.path.isfile(annotation_path):
+            print(f'Downloading {annotation_file}...')
+            urlretrieve(cf["url"][type_], annotation_path)
 
 
 def main(cf):
