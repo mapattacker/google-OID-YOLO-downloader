@@ -1,0 +1,11 @@
+download_folders:
+  img: img
+  bbox: txt
+  metadata: metadata
+bbox_suffix: annotations-bbox.csv
+attributes:
+  IsOccluded: False
+  IsTruncated: False
+  IsDepiction: False
+  IsInside: False
+  IsGroupOf: null
