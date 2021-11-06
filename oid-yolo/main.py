@@ -28,7 +28,7 @@ def dl_metadata(cf):
         os.system("sh download_metadata.sh")
 
 
-def main(cf, split=True):
+def main(cf):
     """pipeline for downloading OID images & annotation files
 
     cf (dict): configuration params from config.yaml
