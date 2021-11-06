@@ -3,6 +3,7 @@ class: Flower
 download_folders:
   img: img
   bbox: img
+  split: split
   metadata: metadata
 bbox_suffix: annotations-bbox.csv
 img_downloader: download.txt

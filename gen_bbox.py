@@ -4,6 +4,7 @@ import pandas as pd
 import yaml
 from tqdm import tqdm
 
+from utils_preprocess import get_file_list
 from utils_bbox import Nxxyy2yolo
 
 
@@ -70,16 +71,6 @@ def gen_bbox():
                 txt_path = os.path.join(folder["bbox"], f'{img}.txt')
                 f = open(txt_path, "a")
                 f.write(f'0 {yolo[0]} {yolo[1]} {yolo[2]} {yolo[3]}\n')
-
-
-def get_file_list(folder, file_extensions):
-    """get list of files from their extensions"""
-
-    file_list = []
-    for file in os.listdir(folder):
-        if file.endswith(file_extensions):
-            file_list.append(file)
-    return sorted(file_list)
 
 
 def check_balance(
