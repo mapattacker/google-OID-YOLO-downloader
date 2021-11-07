@@ -16,3 +16,10 @@ Add [class name](https://storage.googleapis.com/openimages/v5/class-descriptions
 ```bash
 python main.py
 ```
+
+Test some sample images by plotting the bbox.
+
+```python
+# add image id & folder in script
+python visualizer.py
+```
