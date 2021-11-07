@@ -1,4 +1,4 @@
-# google-OID-downloader
+# google-OID-YOLO-downloader
 
 Download Google's open image dataset v6 (OID), with corresponding YOLO annotation files.
 
