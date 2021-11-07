@@ -7,15 +7,15 @@ from utils_preprocess import image_attributes
 
 
 
-def get_class_id(class_, csv_folder):
+def get_class_id(cf):
     """get class id"""
-    path = os.path.join(csv_folder, "class-descriptions-boxable.csv")
+    path = os.path.join(cf["folders"]["metadata"], cf["class_csv"])
     class_df = pd.read_csv(path, names=["id", "class"])
-    class_id = class_df[class_df["class"]==class_]["id"].values[0]
+    class_id = class_df[class_df["class"]==cf["class"]]["id"].values[0]
     return class_id
 
 
-def get_image_id(cf, type_):
+def get_image_id(class_id, cf, type_):
     """save list of imageids in text file
     Refer to https://storage.googleapis.com/openimages/web/download.html#download_manually
     
@@ -36,9 +36,6 @@ def get_image_id(cf, type_):
     IsDepiction = attr["IsDepiction"]
     IsInside = attr["IsInside"]
     IsGroupOf = attr["IsGroupOf"]
-
-
-    class_id = get_class_id(class_, csv_folder)
     
     download_file_suffix = cf["img_downloader"]
     annotation_file_suffix = cf["bbox_suffix"]
@@ -56,17 +53,11 @@ def get_image_id(cf, type_):
                "IsDepiction", "IsInside", "IsGroupOf"]
     df = pd.read_csv(path, usecols=usecols)
 
-    # filter by attributes
+    # apply filters
     df = image_attributes(df, 
             IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
-
     df = df.drop_duplicates(subset=["ImageID"])
-
-    # limit result
-    if limit:
-        image_ids = df[df["LabelName"]==class_id][:limit]
-    else:
-        image_ids = df[df["LabelName"]==class_id]
+    image_ids = df[df["LabelName"].isin([class_id])][:limit]
 
     # add type path
     image_ids["ids"] = image_ids["ImageID"].apply(lambda x: type_ + "/" + x )

@@ -53,9 +53,10 @@ def main(cf):
     dl_metadata(cf)
 
     download_file_suffix = cf["img_downloader"]
+    class_id = get_class_id(cf)
     for type_ in cf["limit"]:
         print(f"Generating {type_}-download.txt file...")
-        get_image_id(cf, type_)
+        get_image_id(class_id, cf, type_)
 
         download_file = f'{type_}-{download_file_suffix}'
         # adhere to original script args
@@ -64,7 +65,7 @@ def main(cf):
                          "download_folder": os.path.join(cf["folders"]["img"], type_)}
         download_all_images(downloader_cf)
 
-        gen_bbox(cf, type_)
+        gen_bbox(class_id, cf, type_)
         check_balance(cf, type_)
 
         print("\n")

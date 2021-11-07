@@ -25,23 +25,23 @@ def image_attributes(df, IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroup
     """
     
     if IsOccluded:
-        df = df[df["IsOccluded"]==1]
+        df = df[df["IsOccluded"].isin([1])]
     elif IsOccluded == False:
-        df = df[df["IsOccluded"]==0]
+        df = df[df["IsOccluded"].isin([0])]
     if IsTruncated:
-        df = df[df["IsTruncated"]==1]
+        df = df[df["IsTruncated"].isin([1])]
     elif IsTruncated == False:
-        df = df[df["IsTruncated"]==0]
+        df = df[df["IsTruncated"].isin([0])]
     if IsGroupOf:
-        df = df[df["IsGroupOf"]==1]
+        df = df[df["IsGroupOf"].isin([1])]
     elif IsGroupOf == False:
-        df = df[df["IsGroupOf"]==0]
+        df = df[df["IsGroupOf"].isin([0])]
     if IsDepiction:
-        df = df[df["IsDepiction"]==1]
+        df = df[df["IsDepiction"].isin([1])]
     elif IsDepiction == False:
-        df = df[df["IsDepiction"]==0]
+        df = df[df["IsDepiction"].isin([0])]
     if IsInside:
-        df = df[df["IsInside"]==1]
+        df = df[df["IsInside"].isin([1])]
     elif IsInside == False:
-        df = df[df["IsInside"]==0]
+        df = df[df["IsInside"].isin([0])]
     return df

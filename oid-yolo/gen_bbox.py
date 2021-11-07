@@ -3,12 +3,12 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from utils_preprocess import get_file_list, image_attributes
 from utils_bbox import Nxxyy2yolo
+from utils_preprocess import get_file_list, image_attributes
 
 
 
-def gen_bbox(cf, type_):
+def gen_bbox(class_id, cf, type_):
     """generate annotation bbox text files for each image downloaded"""
 
     # load configs
@@ -27,18 +27,19 @@ def gen_bbox(cf, type_):
     # read annotation file
     bbox_file = f'{type_}-{cf["bbox_suffix"]}'
     bbox_path = os.path.join(folder["metadata"], bbox_file)
-    usecols = ["ImageID", "XMin", "XMax", "YMin", "YMax",
+    usecols = ["ImageID", "LabelName", "XMin", "XMax", "YMin", "YMax",
                 "IsOccluded", "IsTruncated", "IsDepiction", 
                 "IsInside", "IsGroupOf"]
-    df = pd.read_csv(bbox_path)
+    df = pd.read_csv(bbox_path, usecols=usecols)
 
-    # filter by attributes
+    # apply filters
     df = image_attributes(df, 
             IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroupOf)
+    df = df[df["LabelName"].isin([class_id])]
 
     img_list = dl_df[dl_df["type"]==type_]["img"].tolist()
-    for img in tqdm(img_list, desc="Downloading annotations"):
-        img_df = df[df["ImageID"]==img]
+    for img in tqdm(img_list, desc="Generating annotations"):
+        img_df = df[df["ImageID"].isin([img])]
         img_df = img_df[["XMin", "XMax", "YMin", "YMax"]]
 
         # iterate each bbox within an image
