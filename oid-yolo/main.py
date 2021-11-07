@@ -46,8 +46,7 @@ def main(cf, annotation=True):
     """pipeline for downloading OID images & annotation files
 
     cf (dict): configuration params from config.yaml
-    downloader_cf (dict): customised params for downloader.py
-    split (bool): execute train-val split of img & txt files
+    annotation (bool): if True, download annotation files
     """
 
     dl_metadata(cf)
@@ -76,6 +75,4 @@ if __name__ == "__main__":
     f = open("config.yaml", "r")
     cf = yaml.safe_load(f)
     create_folders(cf)
-    main(cf)
-
-    
+    main(cf, annotation=True)
