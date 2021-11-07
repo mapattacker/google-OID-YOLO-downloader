@@ -42,7 +42,7 @@ def dl_metadata(cf):
             urlretrieve(cf["url"][type_], annotation_path)
 
 
-def main(cf):
+def main(cf, annotation=True):
     """pipeline for downloading OID images & annotation files
 
     cf (dict): configuration params from config.yaml
@@ -65,8 +65,9 @@ def main(cf):
                          "download_folder": os.path.join(cf["folders"]["img"], type_)}
         download_all_images(downloader_cf)
 
-        gen_bbox(class_id, cf, type_)
-        check_balance(cf, type_)
+        if annotation:
+            gen_bbox(class_id, cf, type_)
+            check_balance(cf, type_)
 
         print("\n")
 
