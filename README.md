@@ -11,7 +11,7 @@ cd oid-yolo
 pip install -r requirements.txt
 ```
 
-Edit `config.yaml` as necessary
+Add [class name](https://storage.googleapis.com/openimages/v5/class-descriptions-boxable.csv) and other parameters in `config.yaml`.
 
 ```bash
 python main.py
