@@ -1,5 +1,7 @@
 import os
 
+from joblib import Parallel, delayed
+
 
 def get_file_list(folder, file_extensions):
     """get list of files from their extensions"""
@@ -45,3 +47,25 @@ def image_attributes(df, IsOccluded, IsTruncated, IsDepiction, IsInside, IsGroup
     elif IsInside == False:
         df = df[df["IsInside"].isin([0])]
     return df
+
+
+def total_instances(folder, n_jobs=1):
+    """find total number of objects, i.e. bounding boxes"""
+    file_list = get_file_list(folder, ".txt")
+
+    def get_instance_file(file):
+        f = open(os.path.join(folder, file))
+        f = [cnt for cnt, _ in enumerate(f)][-1]+1
+        return f
+
+    total = Parallel(n_jobs=n_jobs, backend="threading")(
+                delayed(get_instance_file)(f) for f in file_list)
+
+    return sum(total)
+
+
+
+if __name__ == "__main__":
+    folder = "/Users/Desktop/self/yolov5/datasets/train"
+    total = total_instances(folder)
+    print(total)
