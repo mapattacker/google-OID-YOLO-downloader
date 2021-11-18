@@ -1,16 +1,16 @@
 class: Flower
 limit: # number of images to dl
   train: 1500
-  validation: 500
-  test: 500
+  validation: 400
+  test: 200
 folders:
   img: img
   bbox: img
   metadata: metadata
-threads: 10
+threads: 15
 attributes:
-  IsOccluded: False
-  IsTruncated: False
+  IsOccluded: null
+  IsTruncated: null
   IsDepiction: False
   IsInside: False
   IsGroupOf: null
